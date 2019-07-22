@@ -1,2 +1,2 @@
 # ksotd
-Keyboard Shortcut of the Day
+Learn a different keyboard shortcut every day

@@ -1,0 +1,23 @@
+{
+  "name": "keyboard-shortcut-of-the-day",
+  "version": "1.0.0",
+  "description": "Learn a new keyboard shortcut every day",
+  "private": false,
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server.js"
+  },
+  "author": "Graham",
+  "license": "MIT",
+  "engines": {
+    "node": "~0.10.0 || ~4.2.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mustache-express": "^1.2.8",
+    "npm": "^6.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
