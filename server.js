@@ -4,7 +4,7 @@ var mustacheExpress = require('mustache-express');
 var humanize = require('humanizer');
 
 router.get('/', function (req, res) {
-    res.render('index', { title: 'Keyboard shortcut of the day', datetime: (new DateTime()).humanize });
+    res.render('index', { title: 'Keyboard shortcut of the day', datetime: (new DateTime())});
 })
   
 var app = express();
