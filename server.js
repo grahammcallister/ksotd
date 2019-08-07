@@ -3,7 +3,7 @@ var router = express.Router();
 var mustacheExpress = require('mustache-express');
 
 router.get('/', function (req, res) {
-    res.render('index', { title: 'Keyboard shortcut of the day', datetime: new Date()});
+    res.render('index', { title: 'Keyboard shortcut of the day', datetime: () => { return 'Hello'} });
 })
   
 var app = express();
