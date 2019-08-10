@@ -16,7 +16,8 @@
     "express": "^4.17.1",
     "humanizer": "^0.1.1",
     "mustache-express": "^1.2.8",
-    "npm": "^6.10.1"
+    "npm": "^6.10.1",
+    "lodash": ">=4.17.13"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
