@@ -2,8 +2,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} {{ datetime }}</title>
-    <link href="/css/font-awesome.css" rel="stylesheet">
+    <title>{{ title }} </title>
+    <link href="/css/all.css" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -16,38 +16,42 @@
             </div>
             <hr />
 
-            <div class="row jumbotron">
-                <div>
-                <h2>
-                    <span class="label label-primary">Move Code Up</span>
-                </h2>
-                <h4><span class="label label-default glyphicon glyphicon-tag">Jetbrains Resharper</span></h4>
-                <h1>
-                    <kbd class="light">
-                        Ctrl
-                    </kbd>
-                    &nbsp;+&nbsp;
-                    <kbd class="light">
-                        Shift
-                    </kbd>
-                    &nbsp;+&nbsp;
-                    <kbd class="light">
-                        Alt
-                    </kbd>
-                    &nbsp;+&nbsp;
-                    <kbd class="light">
-                        Up
-                    </kbd>
-                </h1>
+            <div class="row">
+                
+                <div class="card mr-auto">
+                    <div class="card-title"><h2><span style="margin-left: 20px;">Move Code Up</span></h2></div>
+                        <div class="card-body"><h1>
+                                <kbd class="light">
+                                    Ctrl
+                                </kbd>
+                                &nbsp;+&nbsp;
+                                <kbd class="light">
+                                    Shift
+                                </kbd>
+                                &nbsp;+&nbsp;
+                                <kbd class="light">
+                                    Alt
+                                </kbd>
+                                &nbsp;+&nbsp;
+                                <kbd class="light">
+                                    Up
+                                </kbd>
+                            </h1></div>
+                <div class="card-footer"><span class="fas fa-tag" style="margin-left: 5px;"></span><span class="label label-default" style="margin-left: 5px;">Jetbrains Resharper</span></div>
+                
+                           
             </div>
             </div>
         </div>
         <footer class="footer">
             <div class="container">
+                    <hr/>
                 <p class="text-muted">Helping developers and power users to learn new keyboard shortcuts for their favourite tools.<br/>Accepting pull requests on Github: <a href="https://github.com/grahammcallister/ksotd">https://github.com/grahammcallister/ksotd</a></p>
             </div>
         </footer>
         <script src="/js/jquery.min.js"></script>
+        <script type="module" src="/js/popper.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/fontawesome.js"></script>
 </body>
 </html>

@@ -12,15 +12,25 @@
   "engines": {
     "node": "~0.10.0 || ~4.2.0"
   },
+  "nodemonConfig": {
+    "verbose": true,
+    "watch": [
+      "public/",
+      "views/",
+      "server.js"
+    ]
+  },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.10.1",
     "bootstrap": "^4.3.1",
     "express": "^4.17.1",
-    "font-awesome": "^4.7.0",
+    "glyphicons": "^0.2.0",
     "humanizer": "^0.1.1",
     "jquery": "^3.4.1",
     "lodash": ">=4.17.13",
     "mustache-express": "^1.2.8",
-    "npm": "^6.10.1"
+    "npm": "^6.10.1",
+    "popper.js": "^1.15.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
