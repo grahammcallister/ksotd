@@ -21,31 +21,24 @@
                 <div class="card mr-auto">
                         <div class="card-body">
                             <h1>
+                               {{ #keys }} 
                                 <kbd class="light">
-                                    Ctrl
+                                        {{ . }}
                                 </kbd>
-                                &nbsp;+&nbsp;
-                                <kbd class="light">
-                                    Shift
-                                </kbd>
-                                &nbsp;+&nbsp;
-                                <kbd class="light">
-                                    Alt
-                                </kbd>
-                                &nbsp;+&nbsp;
-                                <kbd class="light">
-                                    Up
-                                </kbd>
+                                &nbsp;&nbsp;
+                                {{ /keys }}
                             </h1>
-                            <h2><span style="margin-top: 5px; margin-left: 5px;">Move code up</span></h2>
-                            <div class="text-muted">Quickly rearrange expressions, statements, type members, and other elements in your code.</div>
+                            <h2><span style="margin-top: 5px; margin-left: 5px;">{{ stitle }}</span></h2>
+                            <div class="text-muted">{{ description }}</div>
                         </div>
                 <div class="card-footer row">
                     <div class="small col-sm-6">
-                       <span class="fas fa-tag"></span>&nbsp;<span class="label label-default">JetBrains</span>&nbsp;<span class="fas fa-tag" style="margin-left: 5px;"></span>&nbsp;<span class="label label-default" style="margin-left: 5px;">Resharper</span>
+                            {{ #vendor }}<span class="fas fa-tag"></span>&nbsp;<span class="label label-default">{{ vendor }}</span>&nbsp;{{ /vendor }}{{ #product }}<span class="fas fa-tag" style="margin-left: 5px;"></span>&nbsp;<span class="label label-default" style="margin-left: 5px;">{{ product }}</span>{{ /product }}
                     </div>
                     <div class="small text-right col-sm-6">
-                        <a href="https://www.jetbrains.com/help/resharper/Coding_Assistance__Moving_Code_Elements.html"><span class="fas fa-book"></span> Documentation</a>
+                            {{ #documentation }}
+                        <a href="{{ documentation }}"><span class="fas fa-book"></span> Documentation</a>
+                        {{ /documentation }}
                     </div>
                 </div>
             </div>
@@ -61,5 +54,9 @@
         <script type="module" src="/js/popper.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
         <script src="/js/fontawesome.js"></script>
+        <script>
+            var token = '{{ token }}';
+            // {{ shortcut }}
+        </script>
 </body>
 </html>
