@@ -1,0 +1,43 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link href="/css/all.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+        <div class="container body-content">
+            <div class="row" style="margin-top: 25px;">
+                <h4>Error</h4>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <span>An error has happened, please try again later.</span>
+            </div>
+            <hr />
+
+            <div class="row">
+                
+                <div class="card mr-auto">
+                        <div class="card-body">
+                            Detail: {{ message }}
+                        </div>
+            </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container">
+                    <hr/>
+                <p class="text-muted">Helping developers and power users to learn new keyboard shortcuts for their favourite tools.<br/>Accepting pull requests on Github: <a href="https://github.com/grahammcallister/ksotd">https://github.com/grahammcallister/ksotd</a></p>
+            </div>
+        </footer>
+        <script src="/js/jquery.min.js"></script>
+        <script type="module" src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/fontawesome.js"></script>
+        <script>
+            var token = '{{ token }}';
+            // {{ shortcut }}
+        </script>
+</body>
+</html>
