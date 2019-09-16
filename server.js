@@ -11,7 +11,7 @@ var secret = process.env.TOKENS_KSOTD || 'shhhhh';
 var phrase = process.env.PHRASE_KSOTD || 'hakunamatata';
 
 var apiCall = function(path, method, signed, data, success, err) {
-    let host = process.env.API || '127.0.0.1';
+    let host = process.env.API || 'localhost';
     let port = process.env.API_PORT || '10010';
     let headers = {'X-API-Key': signed};
     let dataString = JSON.stringify(data);
@@ -64,13 +64,13 @@ var getShortcut = function(signed, res) {
         res.render('index', { title: 'Keyboard shortcut of the day', dissa: icons.ticket, token: signed, 'shortcut' : JSON.stringify(shortcut), 'description': shortcut.description, stitle: shortcut.title, vendor: shortcut.vendor, product: shortcut.product, keys: shortcut.keycombo, documentation: shortcut.documentation });
     },
     function(error, req){
-        res.render('error');
+        res.render('error', { message: error.message});
     }
     );
 }
 
 router.get('/', function (req, res) {
-    var signed = jwt.sign({ phrase }, secret);
+    var signed = jwt.sign({ phrase }, secret, { expiresIn: '1h'});
     getShortcut(signed, res);
 })
   
