@@ -43,6 +43,10 @@ var apiCall = function(path, method, signed, data, success, err) {
 
                 res.on('end', function(){
                     let responseObject = JSON.parse(responseString);
+                    if(responseObject.message) {
+                        err(responseObject, req);
+                        return;
+                    }
                     success(responseObject);
                 });         
             });
@@ -58,9 +62,11 @@ var shortcut = {
     message: 'Not yet'
 }
 
+var emptyShortcut = shortcut;
+
 var getShortcut = function(signed, res) {
     apiCall('/shortcuts/1', 'GET', signed, null, function (dataObject){
-        shortcut = dataObject;
+        shortcut = dataObject || emptyShortcut;
         res.render('index', { title: 'Keyboard shortcut of the day', dissa: icons.ticket, token: signed, 'shortcut' : JSON.stringify(shortcut), 'description': shortcut.description, stitle: shortcut.title, vendor: shortcut.vendor, product: shortcut.product, keys: shortcut.keycombo, documentation: shortcut.documentation });
     },
     function(error, req){
