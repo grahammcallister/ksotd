@@ -11,8 +11,8 @@ var secret = process.env.TOKENS_KSOTD || 'shhhhh';
 var phrase = process.env.PHRASE_KSOTD || 'hakunamatata';
 
 var apiCall = function(path, method, signed, data, success, err) {
-    let host = process.env.API || 'localhost';
-    let port = process.env.API_PORT || '10010';
+    let host = process.env.API || 'api.keyboardshortcutoftheday.com';
+    let port = process.env.API_PORT || '80';
     let headers = {'X-API-Key': signed};
     let dataString = JSON.stringify(data);
     if(method === 'GET' && data) {
@@ -70,7 +70,7 @@ var getShortcut = function(signed, res) {
         res.render('index', { title: 'Keyboard shortcut of the day', dissa: icons.ticket, token: signed, 'shortcut' : JSON.stringify(shortcut), 'description': shortcut.description, stitle: shortcut.title, vendor: shortcut.vendor, product: shortcut.product, keys: shortcut.keycombo, documentation: shortcut.documentation });
     },
     function(error, req){
-        res.render('error', { message: error.message});
+        res.render('error', { message: error.message, token: signed});
     }
     );
 }
