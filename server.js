@@ -50,7 +50,8 @@ var apiCall = function(path, method, signed, data, success, err) {
                         return;
                     }
                     success(responseObject);
-                });         
+                });
+                res.on('error', err);         
             });
             req.on('error', err);
             req.write(dataString);
