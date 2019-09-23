@@ -35,7 +35,7 @@ var apiCall = function(path, method, signed, data, success, err) {
         timeout: 300
       };
       try {
-            let req = http.request(options, function(anError, res, body){
+            let req = http.request(options, function(res){
             
             res.setEncoding('utf-8');
             var responseString = '';
