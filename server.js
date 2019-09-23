@@ -34,32 +34,33 @@ var apiCall = function(path, method, signed, data, success, err) {
         headers
       };
       try {
-            let req = http.request(options, function(res){
+            // let req = http.request(options, function(res){
             
-                res.setEncoding('utf-8');
-                var responseString = '';
+            //     res.setEncoding('utf-8');
+            //     var responseString = '';
 
-                res.on('data', function(data){
-                    responseString += data;
-                });
+            //     res.on('data', function(data){
+            //         responseString += data;
+            //     });
 
-                res.on('end', function(){
-                    if(responseString) {
-                        let responseObject = JSON.parse(responseString);
-                        if(responseObject.message) {
-                            err(responseObject, req);
-                            return;
-                        }
-                        success(responseObject);
-                    } else {
-                        err('No response', req);
-                    }
-                });
-                res.on('error', err);         
-            });
-            req.on('error', err);
-            req.write(dataString);
-            req.end();
+            //     res.on('end', function(){
+            //         if(responseString) {
+            //             let responseObject = JSON.parse(responseString);
+            //             if(responseObject.message) {
+            //                 err(responseObject, req);
+            //                 return;
+            //             }
+            //             success(responseObject);
+            //         } else {
+            //             err('No response', req);
+            //         }
+            //     });
+            //     res.on('error', err);         
+            // });
+            // req.on('error', err);
+            // req.write(dataString);
+            // req.end();
+            err('Api calls are broken');
         } catch (error) {
             err(error);
         }
