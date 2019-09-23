@@ -31,38 +31,38 @@ var apiCall = function(path, method, signed, data, success, err) {
         port,
         path,
         method,
-        headers
+        headers,
+        timeout: 300
       };
       try {
-            // let req = http.request(options, function(res){
+            let req = http.request(options, function(anError, res, body){
             
-            //     res.setEncoding('utf-8');
-            //     var responseString = '';
+            res.setEncoding('utf-8');
+            var responseString = '';
 
-            //     res.on('data', function(data){
-            //         responseString += data;
-            //     });
+            res.on('data', function(data){
+                     responseString += data;
+                 });
 
-            //     res.on('end', function(){
-            //         if(responseString) {
-            //             let responseObject = JSON.parse(responseString);
-            //             if(responseObject.message) {
-            //                 err(responseObject, req);
-            //                 return;
-            //             }
-            //             success(responseObject);
-            //         } else {
-            //             err('No response', req);
-            //         }
-            //     });
-            //     res.on('error', err);         
-            // });
-            // req.on('error', err);
-            // req.write(dataString);
-            // req.end();
-            err('Api calls are broken');
+            res.on('end', function(){
+                     if(responseString) {
+                         let responseObject = JSON.parse(responseString);
+                         if(responseObject.message) {
+                             err(responseObject, req);
+                             return;
+                         }
+                         success(responseObject);
+                     } else {
+                         err('No response', req);
+                     }
+                 });
+            });
+            
+            req.on('error', err);
+            req.write(dataString);
+            req.end();
         } catch (error) {
-            err(error);
+            err('Api calls are broken', error);
         }
 }
 
@@ -73,6 +73,12 @@ var shortcut = {
 var emptyShortcut = shortcut;
 
 var getShortcut = function(signed, res) {
+
+    process.on('uncaughtException', function(anErr) {
+        // handle the error safely
+        res.render('error', { token: signed, message: 'Unhandled error ' + annErr.message});
+    })
+
     apiCall('/shortcuts/1', 'GET', signed, null, function (dataObject){
         shortcut = dataObject || emptyShortcut;
         res.render('index', { title: 'Keyboard shortcut of the day', dissa: icons.ticket, token: signed, 'shortcut' : JSON.stringify(shortcut), 'description': shortcut.description, stitle: shortcut.title, vendor: shortcut.vendor, product: shortcut.product, keys: shortcut.keycombo, documentation: shortcut.documentation });
