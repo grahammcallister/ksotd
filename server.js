@@ -44,12 +44,16 @@ var apiCall = function(path, method, signed, data, success, err) {
                 });
 
                 res.on('end', function(){
-                    let responseObject = JSON.parse(responseString);
-                    if(responseObject.message) {
-                        err(responseObject, req);
-                        return;
+                    if(responseString) {
+                        let responseObject = JSON.parse(responseString);
+                        if(responseObject.message) {
+                            err(responseObject, req);
+                            return;
+                        }
+                        success(responseObject);
+                    } else {
+                        err('No response', req);
                     }
-                    success(responseObject);
                 });
                 res.on('error', err);         
             });
