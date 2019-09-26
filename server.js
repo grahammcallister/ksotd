@@ -34,34 +34,34 @@ var apiCall = function(path, method, signedToken, data, successCallbackFunction,
         timeout: 50
       };
       try {
-            let req = http.request(options, function(res){
+            let apiRequest = http.request(options, function(apiResponse){
             
-            res.setEncoding('utf-8');
+            apiResponse.setEncoding('utf-8');
             var responseString = '';
 
-            res.on('data', function(data){
-                     responseString += data;
+            apiResponse.on('data', function(responseData){
+                     responseString += responseData;
                  });
 
-            res.on('end', function(){
+            apiResponse.on('end', function(){
                      if(responseString) {
                          let responseObject = JSON.parse(responseString);
                          if(responseObject.message) {
-                            errorCallbackFunction(responseObject, req);
+                            errorCallbackFunction(responseObject, apiRequest);
                              return;
                          }
                          successCallbackFunction(responseObject);
                      } else {
-                        errorCallbackFunction('No response', req);
+                        errorCallbackFunction({message: 'No response'}, apiRequest);
                      }
                  });
             });
             
-            req.on('error', err);
-            req.write(dataString);
-            req.end();
-        } catch (error) {
-            err('Api calls are broken', error);
+            apiRequest.on('error', errorCallbackFunction);
+            apiRequest.write(dataString);
+            apiRequest.end();
+        } catch (apiError) {
+            errorCallbackFunction({message: 'Api calls are broken ' + apiError});
         }
 }
 
@@ -69,23 +69,36 @@ var emptyShortcut = {
     message: 'Not yet'
 };
 
-router.get('/', function (req, res) {
-    var signed = jwt.sign({ phrase }, secret, { expiresIn: '1h'});
-    
-    process.on('uncaughtException', function(anErr) {
-        // handle the error safely
-        res.render('error', { token: signed, message: 'Unhandled error ' + annErr.message});
-    })
+router.get('/', 
+    function (routerRequest, routerResponse, next) {
+        
+        routerResponse.on('close', () => {
 
-    apiCall('/shortcuts/1', 'GET', signed, null, 
-        function (aShortcut) {
-            shortcut = aShortcut || emptyShortcut;
-            res.render('index', { title: 'Keyboard shortcut of the day', dissa: icons.ticket, token: signed, 'shortcut' : JSON.stringify(shortcut), 'description': shortcut.description, stitle: shortcut.title, vendor: shortcut.vendor, product: shortcut.product, keys: shortcut.keycombo, documentation: shortcut.documentation });
-        },
-        function(error, req){
-            res.render('error', { message: error.message, token: signed});
         });
-});
+        
+        var token = jwt.sign({ phrase }, secret, { expiresIn: '1h'});
+        
+        apiCall('/shortcuts/1', 'GET', signed, null, 
+            function (aShortcut) {
+                shortcut = aShortcut || emptyShortcut;
+                routerResponse.render('index', {
+                     title: 'Keyboard shortcut of the day',
+                     dissa: icons.ticket,
+                     token, 
+                     'shortcut' : JSON.stringify(shortcut), 
+                     'description': shortcut.description,
+                     stitle: shortcut.title,
+                     vendor: shortcut.vendor,
+                     product: shortcut.product,
+                     keys: shortcut.keycombo,
+                     documentation: shortcut.documentation });
+            },
+            function(error, routerRequest){
+                routerResponse.render('error', { message: error.message, token });
+            });
+        
+            next();
+    });
   
 var app = express();
 app.use(express.static('public'));
