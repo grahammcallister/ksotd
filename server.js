@@ -3,7 +3,6 @@
 var express = require('express');
 var router = express.Router();
 var mustacheExpress = require('mustache-express');
-var humanize = require('humanizer');
 var icons = require('glyphicons');
 var jwt = require('jsonwebtoken');
 var querystring = require('querystring');
@@ -12,10 +11,10 @@ var http = require('http');
 var secret = process.env.TOKENS_KSOTD || 'shhhhh';
 var phrase = process.env.PHRASE_KSOTD || 'hakunamatata';
 
-var apiCall = function(path, method, signed, data, success, err) {
+var apiCall = function(path, method, signedToken, data, successCallbackFunction, errorCallbackFunction) {
     let host = process.env.API || 'api.keyboardshortcutoftheday.com';
     let port = process.env.API_PORT || '80';
-    let headers = {'X-API-Key': signed};
+    let headers = {'X-API-Key': signedToken};
     let dataString = JSON.stringify(data);
     if(method === 'GET' && data) {
         path += '?' + querystring.stringify(data);
@@ -23,7 +22,7 @@ var apiCall = function(path, method, signed, data, success, err) {
         headers = {
             'Content-Type': 'application/json',
             'Content-Length': dataString.length,
-            'X-API-Key': signed
+            'X-API-Key': signedToken
           };
     }
     let options = {
@@ -32,7 +31,7 @@ var apiCall = function(path, method, signed, data, success, err) {
         path,
         method,
         headers,
-        timeout: 300
+        timeout: 50
       };
       try {
             let req = http.request(options, function(res){
@@ -48,12 +47,12 @@ var apiCall = function(path, method, signed, data, success, err) {
                      if(responseString) {
                          let responseObject = JSON.parse(responseString);
                          if(responseObject.message) {
-                             err(responseObject, req);
+                            errorCallbackFunction(responseObject, req);
                              return;
                          }
-                         success(responseObject);
+                         successCallbackFunction(responseObject);
                      } else {
-                         err('No response', req);
+                        errorCallbackFunction('No response', req);
                      }
                  });
             });
@@ -66,33 +65,27 @@ var apiCall = function(path, method, signed, data, success, err) {
         }
 }
 
-var shortcut = {
+var emptyShortcut = {
     message: 'Not yet'
-}
+};
 
-var emptyShortcut = shortcut;
-
-var getShortcut = function(signed, res) {
-
+router.get('/', function (req, res) {
+    var signed = jwt.sign({ phrase }, secret, { expiresIn: '1h'});
+    
     process.on('uncaughtException', function(anErr) {
         // handle the error safely
         res.render('error', { token: signed, message: 'Unhandled error ' + annErr.message});
     })
 
-    apiCall('/shortcuts/1', 'GET', signed, null, function (dataObject){
-        shortcut = dataObject || emptyShortcut;
-        res.render('index', { title: 'Keyboard shortcut of the day', dissa: icons.ticket, token: signed, 'shortcut' : JSON.stringify(shortcut), 'description': shortcut.description, stitle: shortcut.title, vendor: shortcut.vendor, product: shortcut.product, keys: shortcut.keycombo, documentation: shortcut.documentation });
-    },
-    function(error, req){
-        res.render('error', { message: error.message, token: signed});
-    }
-    );
-}
-
-router.get('/', function (req, res) {
-    var signed = jwt.sign({ phrase }, secret, { expiresIn: '1h'});
-    getShortcut(signed, res);
-})
+    apiCall('/shortcuts/1', 'GET', signed, null, 
+        function (aShortcut) {
+            shortcut = aShortcut || emptyShortcut;
+            res.render('index', { title: 'Keyboard shortcut of the day', dissa: icons.ticket, token: signed, 'shortcut' : JSON.stringify(shortcut), 'description': shortcut.description, stitle: shortcut.title, vendor: shortcut.vendor, product: shortcut.product, keys: shortcut.keycombo, documentation: shortcut.documentation });
+        },
+        function(error, req){
+            res.render('error', { message: error.message, token: signed});
+        });
+});
   
 var app = express();
 app.use(express.static('public'));
